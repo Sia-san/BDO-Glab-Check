@@ -21,6 +21,11 @@ if article is None:
 board_no = article.get("data-boardno")
 link = article.get("href")
 
+original_link = link.replace(
+    "https://honyaku.kitsune-bdojp.workers.dev/?url=",
+    ""
+)
+
 title_tag = article.select_one("p.title.line_clamp")
 title = title_tag.get_text(strip=True) if title_tag else "タイトル取得失敗"
 
@@ -40,15 +45,16 @@ else:
 
 if old.get("board_no") != board_no:
 
-    requests.post(
-        os.environ["DISCORD_WEBHOOK"],
-        json={
-            "content":
-            f"🧪 Global Lab更新\n"
-            f"【{title}】\n\n"
-            f"🇯🇵 日本語翻訳\n{link}"
-        }
-    )
+requests.post(
+    os.environ["DISCORD_WEBHOOK"],
+    json={
+        "content":
+        f"🧪 Global Lab更新\n"
+        f"【{title}】\n\n"
+        f"🇯🇵 日本語翻訳\n{link}\n\n"
+        f"🇺🇸 原文\n{original_link}"
+    }
+)
 
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(current, f, ensure_ascii=False)
