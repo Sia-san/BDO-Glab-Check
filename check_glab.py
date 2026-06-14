@@ -41,7 +41,7 @@ else:
 if old.get("board_no") != board_no:
 
     requests.post(
-        os.environ["DISCORD_WEBHOOK_2"],
+        os.environ["DISCORD_WEBHOOK"],
         json={
             "content":
             f"🧪 Global Lab更新\n"
