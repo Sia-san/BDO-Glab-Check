@@ -24,7 +24,7 @@ jobs:
 
       - name: Run
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_2 }}
         run: python check_glab.py
 
       - name: Save State
