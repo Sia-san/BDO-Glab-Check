@@ -24,6 +24,31 @@ link = article.get("href")
 title_tag = article.select_one("p.title.line_clamp")
 title = title_tag.get_text(strip=True) if title_tag else "タイトル取得失敗"
 
-print("board_no =", board_no)
-print("title =", title)
-print("link =", link)
+current = {
+    "board_no": board_no,
+    "link": link,
+    "title": title
+}
+
+STATE_FILE = "state_glab.json"
+
+if os.path.exists(STATE_FILE):
+    with open(STATE_FILE, "r", encoding="utf-8") as f:
+        old = json.load(f)
+else:
+    old = {}
+
+if old.get("board_no") != board_no:
+
+    requests.post(
+        os.environ["DISCORD_WEBHOOK"],
+        json={
+            "content":
+            f"🧪 Global Lab更新\n"
+            f"【{title}】\n\n"
+            f"🇯🇵 日本語翻訳\n{link}"
+        }
+    )
+
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(current, f, ensure_ascii=False)
