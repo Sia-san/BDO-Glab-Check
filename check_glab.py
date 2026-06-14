@@ -12,6 +12,7 @@ headers = {
 html = requests.get(URL, headers=headers, timeout=30).text
 
 soup = BeautifulSoup(html, "html.parser")
+print(html[:3000])
 
 article = soup.select_one("ul.board_list li a.board_item_inner")
 
