@@ -12,23 +12,11 @@ headers = {
 html = requests.get(URL, headers=headers, timeout=30).text
 
 soup = BeautifulSoup(html, "html.parser")
-with open("debug.html", "w", encoding="utf-8") as f:
-    f.write(html)
-
-print("board_list" in html)
-print("board_item_inner" in html)
-print("_categoryNo=2" in html)
-
-print("__NEXT_DATA__" in html)
-print("__INITIAL_STATE__" in html)
-
-print("board_list =", soup.select("ul.board_list"))
-print("board_item =", soup.select("a.board_item_inner"))
 
 article = soup.select_one("ul.board_list li a.board_item_inner")
 
-#if article is None:
-#    raise Exception("記事取得失敗")
+if article is None:
+    raise Exception("記事取得失敗")
 
 board_no = article.get("data-boardno")
 link = article.get("href")
