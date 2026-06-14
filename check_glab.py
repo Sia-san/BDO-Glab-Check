@@ -45,16 +45,16 @@ else:
 
 if old.get("board_no") != board_no:
 
-requests.post(
-    os.environ["DISCORD_WEBHOOK"],
-    json={
-        "content":
-        f"🧪 Global Lab更新\n"
-        f"【{title}】\n\n"
-        f"🇯🇵 日本語翻訳\n{link}\n\n"
-        f"🇺🇸 原文\n{original_link}"
-    }
-)
+    requests.post(
+        os.environ["DISCORD_WEBHOOK"],
+        json={
+            "content":
+            f"🧪 Global Lab更新\n"
+            f"【{title}】\n\n"
+            f"🇯🇵 日本語翻訳\n{link}\n\n"
+            f"🇺🇸 原文\n{original_link}"
+        }
+    )
 
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(current, f, ensure_ascii=False)
