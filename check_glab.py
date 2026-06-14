@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 
-URL = "https://honyaku.kitsune-bdojp.workers.dev/?url=https://blackdesert.pearlabyss.com/GlobalLab/en-US/News/Notice?_categoryNo=2"
+URL = "https://blackdesert.pearlabyss.com/GlobalLab/en-US/News/Notice?_categoryNo=2"
 
 headers = {
     "User-Agent": "Mozilla/5.0"
@@ -19,11 +19,19 @@ if article is None:
     raise Exception("記事取得失敗")
 
 board_no = article.get("data-boardno")
-link = article.get("href")
 
-original_link = link.replace(
-    "https://honyaku.kitsune-bdojp.workers.dev/?url=",
-    ""
+original_link = article.get("href")
+
+# 相対URL対策
+if original_link.startswith("/"):
+    original_link = (
+        "https://blackdesert.pearlabyss.com"
+        + original_link
+    )
+
+translated_link = (
+    "https://honyaku.kitsune-bdojp.workers.dev/?url="
+    + original_link
 )
 
 title_tag = article.select_one("p.title.line_clamp")
@@ -31,7 +39,7 @@ title = title_tag.get_text(strip=True) if title_tag else "タイトル取得失�
 
 current = {
     "board_no": board_no,
-    "link": link,
+    "link": original_link,
     "title": title
 }
 
@@ -51,7 +59,7 @@ if old.get("board_no") != board_no:
             "content":
             f"🧪 Global Lab更新\n"
             f"【{title}】\n\n"
-            f"🇯🇵 日本語翻訳\n{link}\n\n"
+            f"🇯🇵 日本語翻訳\n{translated_link}\n\n"
             f"🇺🇸 原文\n{original_link}"
         }
     )
